@@ -1,12 +1,9 @@
 
 # mavlink2websocket
-Service for streaming MavLink telemetry through a websocket based backend service. 
+Service for streaming MavLink telemetry via websocket based backend service. 
 Two way ommunication with callbacks. Feel free to fork and modify as you wish.
 
 mavlink2websocket is a tiny RPi service writen in C++. 
-
-This project is a Mavlink client to web based GCS(in development), but feel free to 
-use and modify it in your applications.
 
 Please make sure that all necessary libraries are installed before running.
 
