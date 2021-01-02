@@ -1,7 +1,7 @@
 
 # mavlink2websocket
 Service for streaming MavLink telemetry via websocket based backend service. 
-Two way ommunication with callbacks. Feel free to fork and modify as you wish.
+Two way communication with callbacks. Feel free to fork and modify as you wish.
 
 mavlink2websocket is a tiny RPi service writen in C++. 
 
