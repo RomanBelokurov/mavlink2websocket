@@ -10,8 +10,7 @@
  * THE SOFTWARE.
 */
 
-#ifndef MAVSERIAL_H
-#define MAVSERIAL_H
+#pragma once
 
 #include <iostream>
 #include <unistd.h>
@@ -23,20 +22,20 @@
 #include "helpers.h"
 #include "json.h"
 
-class mavserial
+class MavlinkSerial
 {
     public:
-        mavserial(){ }
-        ~mavserial(){ mavlink_thread->join(); }
+        MavlinkSerial(){ }
+        ~MavlinkSerial(){ mavlink_thread->join(); }
         
         void set_message_handler(void(*on_message_callback)(std::string))
         {
             this->on_message_callback = on_message_callback;
         }
 
-        void run(const char* device, int baudrate)
+        void run(std::string device, int baudrate)
         {
-            serialHandle = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+            serialHandle = open(device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
             if (serialHandle == -1)
             {
                 std::cout << "Error - Unable to open UART.  Ensure it is not in use by another application" << std::endl;
@@ -96,5 +95,3 @@ class mavserial
         int serialHandle = -1;
         void (*on_message_callback)(std::string);
 };
-
-#endif
