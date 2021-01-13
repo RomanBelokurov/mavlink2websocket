@@ -46,7 +46,7 @@ class WebSocketClient
             SoupSession *session = soup_session_new();
             if (!session) 
             {
-                std::cout << "Fail to create SoupSession\n";
+                std::cout << "Failed to create SoupSession\n";
                 return false;
             }
 
@@ -54,13 +54,13 @@ class WebSocketClient
             SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, this->server_addr.c_str());
             if (!msg) 
             {
-                std::cout << "Fail to create SoupMessage\n";
+                std::cout << "Failed to create SoupMessage\n";
                 g_object_unref(session);
                 return false;
             }
 
             // Connect to our websocket server
-            std::cout << "Connecting to websocket -> " << server_addr << std::endl;
+            std::cout << "Connecting to websocket uri: " << server_addr << std::endl;
             soup_session_websocket_connect_async(
                 session,
                 msg,
@@ -81,8 +81,7 @@ class WebSocketClient
                 return true;
             }
 
-            if (!websocket_connection) {
-                std::cout << "SendMessage: WebSocket connection is NULL\n";
+            if (!websocket_connection) {                
                 return false;
             }
 
@@ -101,10 +100,10 @@ class WebSocketClient
         
         static void OnConnection(SoupSession *session, GAsyncResult *res, gpointer data)
         {
-            ((WebSocketClient *) data)->OnConnectionImp(session, res);
+            ((WebSocketClient *) data)->OnConnectionImplementation(session, res);
         }
 
-        void OnConnectionImp(SoupSession *session, GAsyncResult *res)
+        void OnConnectionImplementation(SoupSession *session, GAsyncResult *res)
         {
             GError *error = NULL;
             SoupWebsocketConnection *conn = soup_session_websocket_connect_finish(session, res, &error);
@@ -125,10 +124,10 @@ class WebSocketClient
         }
 
         static void OnMessage(SoupWebsocketConnection *conn, int type, GBytes *message, gpointer data){
-            ((WebSocketClient *) data)->OnMessageImp(conn, type, message);
+            ((WebSocketClient *) data)->OnMessageImplementation(conn, type, message);
         }
 
-        void OnMessageImp(SoupWebsocketConnection *conn, int type, GBytes *gbytes)
+        void OnMessageImplementation(SoupWebsocketConnection *conn, int type, GBytes *gbytes)
         {
             if (type == SOUP_WEBSOCKET_DATA_TEXT) 
             {
@@ -144,16 +143,16 @@ class WebSocketClient
             }
             else 
             {
-                std::cout << "Invalid data type";
+                std::cout << "Invalid data type\n";
             }
         }
 
 
         static void OnClosing(SoupWebsocketConnection *conn, gpointer data){
-            ((WebSocketClient *) data)->OnClosingImp(conn);
+            ((WebSocketClient *) data)->OnClosingImplementation(conn);
         }
         
-        void OnClosingImp(SoupWebsocketConnection *conn)
+        void OnClosingImplementation(SoupWebsocketConnection *conn)
         {
             std::cout << "Websocket is closing\n";
         }
@@ -161,10 +160,10 @@ class WebSocketClient
 
 
         static void OnClose(SoupWebsocketConnection *conn, gpointer data){
-            ((WebSocketClient *) data)->OnCloseImp(conn);
+            ((WebSocketClient *) data)->OnCloseImplementation(conn);
         }
         
-        void OnCloseImp(SoupWebsocketConnection *conn)
+        void OnCloseImplementation(SoupWebsocketConnection *conn)
         {
             soup_websocket_connection_close(conn, SOUP_WEBSOCKET_CLOSE_NORMAL, NULL);
             g_clear_object(&conn);
